@@ -76,7 +76,7 @@ body {
 #calendar > .body {
   display: grid;
   grid-template-columns: auto auto auto auto auto auto auto;
-  grid-template-rows: auto auto auto auto auto;
+  grid-template-rows: auto auto auto auto auto auto;
 }
 
 #calendar > .body .sq {
@@ -95,8 +95,12 @@ body {
   background-color: var(--white);
 }
 
+.today {
+  background-color: rgb(34, 0, 255);
+}
+
 .selected {
-  background-color: rgb(181, 255, 78);
+  background-color: rgb(79, 79, 79);
 }
 
 .day-of {

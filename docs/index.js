@@ -43,22 +43,39 @@ function renderCalendar() {
   dayArray = [];
 
   for (let i = lWeekDay - 1; i > -1; i--) {
-    dayArray.push(daysOfPriorMonth - i);
+    dayArray.push({
+      day: daysOfPriorMonth - i,
+      month: (cMonth === 0 ? 11 : cMonth - 1) + 1,
+      year: cMonth === 0 ? cYear - 1 : cYear,
+    });
   }
 
-  dayArray = dayArray.concat([...Array(daysOfMonth).keys()].map((e) => +e + 1));
-  dayArray = dayArray.concat(
-    [...Array(42 - dayArray.length).keys()].map((e) => +e + 1)
-  );
+  for (let i = 1; i <= daysOfMonth; i++) {
+    dayArray.push({ day: i, month: cMonth + 1, year: cYear });
+  }
+
+  const d = 42 - dayArray.length;
+
+  for (let i = 1; i <= d; i++) {
+    dayArray.push({
+      day: i,
+      month: ((cMonth + 1) % 12) + 1,
+      year: cMonth === 11 ? cYear + 1 : cYear,
+    });
+  }
 
   const days = document.getElementById("days");
   days.innerHTML = "";
 
   dayArray.forEach((a, i) => {
     let day = document.createElement("div");
+    day.dataset.date = Object.values(a).join("/");
     day.classList.add("sq");
+    if (day.dataset.date === new Date().toLocaleDateString()) {
+      day.classList.add("today");
+    }
     day.id = "cel-" + i;
-    day.innerText = a;
+    day.innerText = a.day;
     day.addEventListener("click", function () {
       const index = i;
 
@@ -69,7 +86,6 @@ function renderCalendar() {
       if (isSelected && !daysFromTo.includes(index)) {
         daysFromTo[0] = daysFromTo[1];
         daysFromTo[1] = index;
-        someIsSelected = true;
       } else {
         daysFromTo[1] = daysFromTo[0] !== index ? daysFromTo[0] : daysFromTo[1];
         daysFromTo[0] = -1;
